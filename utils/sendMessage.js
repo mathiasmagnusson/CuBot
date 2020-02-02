@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js')
+import { MessageEmbed } from 'discord.js'
 
-exports.util = {
+export default {
 	async run(channel, toSend, category, author = null) {
 		if (toSend instanceof Promise)
 			toSend = await toSend

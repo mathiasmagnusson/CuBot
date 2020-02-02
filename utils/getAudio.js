@@ -1,7 +1,7 @@
-const axios = require('axios');
-const { lavalink } = require('../config.json')
+import axios from 'axios';
+import { lavalink } from '../config.js'
 
-exports.util = {
+export default {
 	async run(query) {
 		const res = await axios.get(`http://${lavalink.host}:${lavalink.port}/loadtracks?identifier=${encodeURIComponent(query)}`, {
 			headers: {

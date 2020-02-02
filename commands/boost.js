@@ -1,16 +1,14 @@
-const { categories } = require('../config.json');
-const { MessageEmbed } = require('discord.js');
+import { categories } from '../config.js';
+import { MessageEmbed } from 'discord.js';
 
-exports.command = {
-	shortDesc: 'Turns bass boosting on or off.',
-	args: false,
-	aliases: ['bass', 'eq'],
-	category: categories.VOICE,
+export default boost = async (message, args) => {
+	const { client } = message;
+	const { commands, utils } = client;
 
-	async run(message, args) {
-		const { client } = message;
-		const { commands, utils } = client;
+	return utils.changeEqualizer.run(message, client.equalizers.bassboost)
+};
 
-		return utils.changeEqualizer.run(message, client.equalizers.bassboost)
-	}
-}
+boost.shortDesc = 'Turns bass boosting on or off.';
+boost.args = false;
+boost.aliases = ['bass', 'eq'];
+boost.category = categories.VOICE;

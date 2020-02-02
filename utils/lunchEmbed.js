@@ -1,6 +1,6 @@
-const axios = require('axios');
-const { MessageEmbed } = require('discord.js');
-exports.util = {
+import axios from 'axios';
+import { MessageEmbed } from 'discord.js';
+export default {
 	async run(week = false) {
 		let lunchEmbed = new MessageEmbed();
 		if (week)

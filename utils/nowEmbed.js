@@ -1,7 +1,7 @@
-const { MessageEmbed, MessageAttachment } = require('discord.js')
-const Canvas = require('canvas')
+import { MessageEmbed, MessageAttachment } from 'discord.js'
+import Canvas from 'canvas'
 
-exports.util = {
+export default {
 	run(queue) {
 		let currentTrack = queue[0];
 

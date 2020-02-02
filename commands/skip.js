@@ -1,29 +1,28 @@
-const { categories } = require('../config.json');
-const { MessageEmbed } = require('discord.js');
+import { categories } from '../config.js';
+import { MessageEmbed } from 'discord.js';
 
-exports.command = {
-	shortDesc: 'Skips the playing track.',
-	args: false,
-	aliases: ['s'],
-	category: categories.VOICE,
-	async run(message, args) {
-		const { client } = message;
-		const { commands, utils } = client;
-		let userCheckFail = utils.checkUserVoice.run(message);
-		if (userCheckFail) return userCheckFail;
+export default command = async (message, args) => {
+	const { client } = message;
+	const { commands, utils } = client;
+	let userCheckFail = utils.checkUserVoice.run(message);
+	if (userCheckFail) return userCheckFail;
 
-		let botCheckFail = utils.checkBotVoice.run(message);
-		if (botCheckFail) return botCheckFail;
+	let botCheckFail = utils.checkBotVoice.run(message);
+	if (botCheckFail) return botCheckFail;
 
-		const player = client.player.get(message.guild.id);
-		if (player.loop)
-			player.loop = !player.loop;
-		await player.stop()
-		let queue = await utils.getServerQueue.run(client, message.guild.id).slice();
+	const player = client.player.get(message.guild.id);
+	if (player.loop)
+		player.loop = !player.loop;
+	await player.stop()
+	let queue = await utils.getServerQueue.run(client, message.guild.id).slice();
 
-		console.general('Skipped track ?. New queue length for ?: ?', queue.shift().info.title, message.guild.name, queue.length);
-		if (queue.length > 0)
-			return utils.nowEmbed.run(queue);
-		return null;
-	}
+	console.general('Skipped track ?. New queue length for ?: ?', queue.shift().info.title, message.guild.name, queue.length);
+	if (queue.length > 0)
+		return utils.nowEmbed.run(queue);
+	return null;
 }
+
+command.shortDesc = 'Skips the playing track.';
+command.args = false;
+command.aliases = ['s'];
+command.category = categories.VOICE;

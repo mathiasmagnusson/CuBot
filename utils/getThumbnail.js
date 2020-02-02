@@ -1,7 +1,7 @@
-const jimp = require('jimp');
-const download = require('image-downloader')
+import jimp from 'jimp';
+import download from 'image-downloader'
 
-exports.util = {
+export default {
 	run(client, track) {
 		return new Promise(async (resolve, rej) => {
 			let res = [

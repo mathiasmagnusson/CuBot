@@ -1,4 +1,4 @@
-exports.util = {
+export default {
 	run(message) {
 		let client = message.client;
 		if (!message.member.voice.channelID) {

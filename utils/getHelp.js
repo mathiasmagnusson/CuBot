@@ -1,7 +1,7 @@
-const Discord = require('discord.js')
-const { prefix, categories } = require('../config.json')
+import { MessageEmbed } from 'discord.js'
+import { prefix, categories } from '../config.js'
 
-exports.util = {
+export default {
 	run(command, extended = false) {
 		if (extended)
 			return new Discord.MessageEmbed()

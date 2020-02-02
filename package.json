@@ -1,15 +1,16 @@
 {
-	"name": "CuBot",
+	"name": "cubot",
 	"version": "2.0.0",
 	"shortDesc": "CuBot is a discord-bot",
 	"main": "index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "NODE_ENV=development node index.js",
-		"prod": "NODE_ENV=production node index.js"
+		"dev": "NODE_ENV=development node -r dotenv/config index.js",
+		"prod": "NODE_ENV=production node -r dotenv/config index.js"
 	},
 	"keywords": [],
 	"author": "Tokxhu",
+	"type": "module",
 	"license": "ISC",
 	"dependencies": {
 		"axios": "^0.19.1",
@@ -18,6 +19,7 @@
 		"cron": "^1.8.2",
 		"discord.js": "github:discordjs/discord.js",
 		"discord.js-lavalink": "^2.2.3",
+		"dotenv": "^8.2.0",
 		"image-downloader": "^3.5.0",
 		"jimp": "^0.9.3",
 		"opusscript": "0.0.7",

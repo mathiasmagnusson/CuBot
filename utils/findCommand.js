@@ -1,4 +1,4 @@
-exports.util = {
+export default {
 	run(client, commandName) {
 		return client.commands[commandName] ||
 			client.commands[Object.keys(client.commands).find(c =>

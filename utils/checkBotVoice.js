@@ -1,4 +1,4 @@
-exports.util = {
+export default {
 	run(message) {
 		const { client } = message;
 		if (!client.player.get(message.guild.id))

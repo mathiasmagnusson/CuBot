@@ -1,9 +1,9 @@
-exports.util = {
+export default {
 	async run(client, message, queue, player) {
 		console.general(`Playing ? in ?`, queue[0].info.title, message.guild.name)
 		queue[0].startedAt = Date.now()
 		player.play(queue[0].track)
-    
+
 		player.once('end', async (data) => {
 			if (data.reason === "REPLACED") return;
 			if (!player.loop) {

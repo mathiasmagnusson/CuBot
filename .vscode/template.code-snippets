@@ -18,32 +18,30 @@
 	"Command Template": {
 		"prefix": "tcommand",
 		"body": [
-			"const { categories } = require('../config.json');",
-			"const { MessageEmbed } = require('discord.js');",
+			"import { categories } from '../config.js';",
+			"import { MessageEmbed } from 'discord.js';",
 			"",
-			"exports.command = {",
-			"\tusage: '${1}',",
-			"\tshortDesc: '${2}',",
-			"\targs: ${3:false},",
-			"\taliases: ['${4}'],",
-			"\tcategory: categories.${5:MISC},",
-			"\tasync run(message, args) {",
+			"",
+			"\tcommand.usage =  '${1}',",
+			"\tcommand.shortDesc = '${2}',",
+			"\tcommand.args =${3:false},",
+			"\tcommand.aliases =['${4}'],",
+			"\tcommand.category =categories.${5:MISC},",
+			"\t= async (message, args) => {",
 			"\t\t${0}",
 			"\t}",
 			"}"
 		],
-		"shortDesc": "Command Template"
 	},
 	"Util Template": {
 		"prefix": "tutil",
 		"body": [
-			"exports.command = {",
+			"",
 			"\tasync run(${1}) {",
 			"\t\t${0}",
 			"\t\treturn null;",
 			"\t}",
 			"}"
 		],
-		"shortDesc": "Util Template"
 	}
 }

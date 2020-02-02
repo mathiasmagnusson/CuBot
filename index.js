@@ -1,19 +1,24 @@
-const Discord = require('discord.js')
-const client = new Discord.Client();
+import Discord from 'discord.js'
+import axios from 'axios'
+// const WebServer from ('./webserver/index')
+import LavaLink from 'discord.js-lavalink';
 
-const axios = require('axios')
-// const WebServer = require('./webserver/index')
-const Lavalink = require('discord.js-lavalink');
-const { PlayerManager } = Lavalink;
-
-const config = require('./config.json');
-const fs = require('fs');
-const chalk = require('chalk');
+import config from './config.js';
+import fs from 'fs';
+import chalk from 'chalk';
 
 // Database
-const dbInit = require('./models/init')
+import dbInit from './models/init.js'
 
-const CronJob = require('cron').CronJob;
+import CronJob from 'cron'
+
+export let models = {},
+	servers = {},
+	commands = {},
+	utils = {};
+
+const client = new Discord.Client()
+export default client;
 
 client.on('message', async (message) => {
 	let content = message.content.split("");
@@ -23,7 +28,7 @@ client.on('message', async (message) => {
 	let args = message.content.slice(config.prefix.length).split(/ +/);
 	let commandName = args.shift().toLowerCase();
 
-	let command = client.utils.findCommand.run(client, commandName);
+	let command = utils.findCommand.run(client, commandName);
 
 	if (!command) return;
 
@@ -35,14 +40,14 @@ client.on('message', async (message) => {
 
 	try {
 		let toSend = await command.run(message, args.join(" "));
-		client.utils.sendMessage.run(
+		utils.sendMessage.run(
 			channel,
 			toSend,
 			command.category,
 			author
 		);
 	} catch (error) {
-		await client.utils.sendError.run(message, error)
+		await utils.sendError.run(message, error)
 	}
 })
 
@@ -73,7 +78,7 @@ client.on('ready', async () => {
 		flat: [{ "band": 0, "gain": 0.0 }, { "band": 1, "gain": 0.0 }, { "band": 2, "gain": 0.0 }, { "band": 3, "gain": 0.0 }, { "band": 4, "gain": 0.0 }, { "band": 5, "gain": 0.0 }, { "band": 6, "gain": 0.0 }, { "band": 7, "gain": 0.0 }, { "band": 8, "gain": 0.0 }, { "band": 9, "gain": 0.0 }, { "band": 10, "gain": 0.0 }, { "band": 11, "gain": 0.0 }, { "band": 12, "gain": 0.0 }, { "band": 13, "gain": 0.0 }, { "band": 14, "gain": 0.0 }]
 	}
 
-	client.player = new PlayerManager(client, config.lavalink.nodes, {
+	client.player = new LavaLink.PlayerManager(client, config.lavalink.nodes, {
 		user: client.user.id,
 		shards: (client.shard && client.shard.count) || 1
 	})
@@ -82,23 +87,21 @@ client.on('ready', async () => {
 
 	client.runningDir = __dirname;
 
-	client.models = {}, client.servers = {}, client.commands = {}, client.utils = {};
-
-	let { models, database } = await dbInit()
+	let { models } = await dbInit()
 	client.models = models;
 
 	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') && (!file.startsWith('command') && !file.startsWith('.'))).map(file => file.replace('.js', ''));
 	for (const file of commandFiles) {
-		const { command } = require(`./commands/${file}`);
+		let command = await import(`./commands/${file}`)
 		command.name = file;
-		client.commands[file] = command;
+		commands[file] = command;
 	}
 
 	const utilFiles = fs.readdirSync('./utils').filter(file => file.endsWith('.js') && (!file.startsWith('command') && !file.startsWith('.'))).map(file => file.replace('.js', ''));
 	for (const file of utilFiles) {
-		const { util } = require(`./utils/${file}`);
+		let util = await import(`./utils/${file}`);
 		util.name = file;
-		client.utils[file] = util;
+		utils[file] = util;
 	}
 
 	client.on('voiceStateUpdate', async (oldState, newState) => {
@@ -112,10 +115,10 @@ client.on('ready', async () => {
 
 	new CronJob('0 30 10 * * 1-5', async () => {
 		let channels = await client.models.channels.findAll()
-		let lunch = await client.utils.lunchEmbed.run();
+		let lunch = await utils.lunchEmbed.run();
 		channels.forEach(dbChannel => {
 			let channel = client.channels.get(dbChannel.channelID);
-			client.utils.sendMessage.run(channel, lunch, config.categories.MISC);
+			utils.sendMessage.run(channel, lunch, config.categories.MISC);
 		})
 	}).start();
 

@@ -1,6 +1,6 @@
-const { MessageEmbed } = require('discord.js')
+import { MessageEmbed } from 'discord.js'
 
-exports.util = {
+export default {
 	async run(message, error) {
 		let { client } = message;
 		if (process.env.NODE_ENV === 'production')
