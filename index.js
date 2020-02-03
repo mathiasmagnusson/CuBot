@@ -2,15 +2,14 @@ import Discord from 'discord.js'
 import axios from 'axios'
 // const WebServer from ('./webserver/index')
 import LavaLink from 'discord.js-lavalink';
-
 import config from './config.js';
 import fs from 'fs';
 import chalk from 'chalk';
-
 // Database
 import dbInit from './models/init.js'
-
 import CronJob from 'cron'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
 
 export let models = {},
 	servers = {},
@@ -85,14 +84,16 @@ client.on('ready', async () => {
 
 	client.dev = client.users.get('284754083049504770');
 
-	client.runningDir = __dirname;
+	let filepath = fileURLToPath(import.meta.url)
+	client.runningDir = dirname(filepath)
 
 	let { models } = await dbInit()
 	client.models = models;
 
 	const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js') && (!file.startsWith('command') && !file.startsWith('.'))).map(file => file.replace('.js', ''));
 	for (const file of commandFiles) {
-		let command = await import(`./commands/${file}`)
+
+		let command = await import(`./commands/${file}.js`)
 		command.name = file;
 		commands[file] = command;
 	}

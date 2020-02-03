@@ -1,20 +1,23 @@
-import Sequelize from 'sequelize';
-import { promises as fs } from 'fs'
-export default async function init() {
+import Sequelize from "sequelize";
+import { promises as fs } from "fs";
 
-	let database = new sequelize('CuBot', 'user', 'password', {
-		host: 'localhost',
-		dialect: 'sqlite',
+export default async function init() {
+	let database = new Sequelize("CuBot", "user", "password", {
+		host: "localhost",
+		dialect: "sqlite",
 		logging: false,
-		storage: 'database.sqlite',
+		storage: "database.sqlite"
 	});
 
-	let modelFiles = (await fs.readdir('./models')).filter(file => !file.startsWith('init'))
+	let modelFiles = (await fs.readdir("./models")).filter(
+		file => !file.startsWith("init")
+	);
 	let models = [];
-	for await (modelFile of modelFiles) {
-		let model = await import(`./${modelFile}`)(database, Sequelize);
+	for await (let modelFile of modelFiles) {
+		let model = await import(`./${modelFile}`);
+		model = model.default(database, Sequelize);
 		await model.sync();
 		models[model.name] = model;
 	}
-	return { database, models }
+	return { database, models };
 }

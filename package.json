@@ -8,9 +8,9 @@
 		"dev": "NODE_ENV=development node -r dotenv/config index.js",
 		"prod": "NODE_ENV=production node -r dotenv/config index.js"
 	},
+	"type": "module",
 	"keywords": [],
 	"author": "Tokxhu",
-	"type": "module",
 	"license": "ISC",
 	"dependencies": {
 		"axios": "^0.19.1",
