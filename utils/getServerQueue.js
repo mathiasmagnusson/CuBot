@@ -1,5 +1,3 @@
-export default {
-	run(client, guildID) {
-		return client.servers[guildID].queue;
-	}
+export default getServerQueue = (client, guildID) => {
+	return client.servers[guildID].queue;
 }
